@@ -71,7 +71,6 @@ module.exports = store => {
     store.commit("session/setSpectator", spectator);
     store.commit("session/setSessionId", sessionId);
   }
-  console.log(localStorage);
   // listen to mutations
   store.subscribe(({ type, payload }, state) => {
     switch (type) {

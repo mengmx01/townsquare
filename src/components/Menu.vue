@@ -268,6 +268,7 @@ export default {
           this.addPlayer();
         }
       };
+      this.$store.commit("players/setFabled", {fabled: "storyteller"});
     },
     copySessionUrl() {
       const url = window.location.href.split("#")[0];

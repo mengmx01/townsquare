@@ -8,6 +8,9 @@ const NEWPLAYER = {
   pronouns: ""
 };
 
+// const storyteller = {"id":local.user.id,"name":"说书人","ability":"……受到惊吓的镇民们赶往城镇广场查看，他们发现当地的一位说书人被谋杀了，他的尸体被钉在钟楼的时针上，鲜血不断地滴落在下方的鹅卵石上。","firstNight":0,"firstNightReminder":"","otherNight":0,"otherNightReminder":"","reminders":[],"remindersGlobal":[],"setup":0,"team":"fabled","isCustom":true,"flavor":"","imageAlt":"fabled"};
+// const deus_ex_fiasco = {"id":"deus_ex_fiasco","name":"失败的上帝","ability":"整局游戏限一次，说书人会犯一个错误，说书人可以纠正错误并公开承认它。","firstNight":0,"firstNightReminder":"","otherNight":0,"otherNightReminder":"","reminders":[],"remindersGlobal":[],"setup":0,"team":"fabled","isOfficial":true,"flavor":"","imageAlt":"fabled"};
+
 const state = () => ({
   players: [],
   fabled: [],
@@ -162,8 +165,21 @@ const mutations = {
   },
   setFabled(state, { index, fabled } = {}) {
     if (index !== undefined) {
+      // do not ever remove the first fabled i.e. storyteller
+      if (index == 0) return;
       state.fabled.splice(index, 1);
     } else if (fabled) {
+      // add storyteller fabled to allow direct messages
+      if (fabled == "storyteller") fabled = {
+        "id": "storyteller",
+        "firstNightReminder": "",
+        "otherNightReminder": "",
+        "reminders": [],
+        "setup": false,
+        "name": "Story Teller",
+        "team": "fabled",
+        "ability": "Click story teller to send ST messages."
+      };
       if (!Array.isArray(fabled)) {
         state.fabled.push(fabled);
       } else {

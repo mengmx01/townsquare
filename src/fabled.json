@@ -1,5 +1,15 @@
 [
   {
+    "id": "storyteller",
+    "firstNightReminder": "",
+    "otherNightReminder": "",
+    "reminders": [],
+    "setup": false,
+    "name": "Story Teller",
+    "team": "fabled",
+    "ability": "Click story teller to send ST messages."
+  },
+  {
     "id": "doomsayer",
     "firstNightReminder": "",
     "otherNightReminder": "",
