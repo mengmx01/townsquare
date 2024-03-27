@@ -134,6 +134,7 @@ const mutations = {
     })
   },
   swap(state, [from, to]) {
+
     [state.players[from], state.players[to]] = [
       state.players[to],
       state.players[from]
@@ -141,15 +142,15 @@ const mutations = {
     // hack: "modify" the array so that Vue notices something changed
     state.players.splice(0, 0);
     state.players.forEach(player => {
-      player["id"] = (state.players.indexOf(player) + 1).toString();
-      player["name"] = player["id"].concat(". ", player["name"].split(". ")[1]);
+      var seatNumber = (state.players.indexOf(player) + 1).toString();
+      player["name"] = seatNumber.toString().concat(". ", player["name"].split(". ")[1]);
     })
   },
   move(state, [from, to]) {
     state.players.splice(to, 0, state.players.splice(from, 1)[0]);
     state.players.forEach(player => {
-      player["id"] = (state.players.indexOf(player) + 1).toString();
-      player["name"] = player["id"].concat(". ", player["name"].split(". ")[1]);
+      var seatNumber= (state.players.indexOf(player) + 1).toString();
+      player["name"] = seatNumber.concat(". ", player["name"].split(". ")[1]);
     })
   },
   setBluff(state, { index, role } = {}) {

@@ -321,12 +321,13 @@ export default {
     leaveSession() {
       if (confirm("Are you sure you want to leave the active live game?")) {
         // vacate seat upon leaving the room
-        if (!this.session.isSpectator) return;
         const playerIndex = this.session.claimedSeat;
-        if (this.session.playerId === this.players[playerIndex].id) {
-          this.$store.commit("session/claimSeat", -1);
-        } else {
-          this.$store.commit("session/claimSeat", playerIndex);
+        if (playerIndex >= 0){
+          if (this.session.playerId === this.players[playerIndex].id) {
+            this.$store.commit("session/claimSeat", -1);
+          } else {
+            this.$store.commit("session/claimSeat", playerIndex);
+          }
         }
 
         this.$store.commit("session/setSpectator", false);
