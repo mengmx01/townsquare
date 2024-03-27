@@ -71,7 +71,7 @@ module.exports = store => {
     store.commit("session/setSpectator", spectator);
     store.commit("session/setSessionId", sessionId);
   }
-
+  console.log(localStorage);
   // listen to mutations
   store.subscribe(({ type, payload }, state) => {
     switch (type) {
@@ -184,6 +184,13 @@ module.exports = store => {
           localStorage.setItem("playerId", payload);
         } else {
           localStorage.removeItem("playerId");
+        }
+        break;
+      case "session/setPlayerName":
+        if (payload) {
+          localStorage.setItem("playerName", payload);
+        } else {
+          localStorage.removeItem("playerName");
         }
         break;
     }
