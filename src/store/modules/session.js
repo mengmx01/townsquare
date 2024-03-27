@@ -18,6 +18,7 @@ const state = () => ({
   playerCount: 0,
   ping: 0,
   playerId: "",
+  playerName:"",
   claimedSeat: -1,
   nomination: false,
   votes: [],
@@ -57,6 +58,9 @@ const mutations = {
       .toLocaleLowerCase()
       .replace(/[^0-9a-z]/g, "")
       .substr(0, 10);
+  },
+  setPlayerName(state, name){
+    state.playerName = name;
   },
   nomination(
     state,

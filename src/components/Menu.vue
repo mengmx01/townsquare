@@ -181,7 +181,7 @@
           </li>
           <li v-if="!session.isSpectator" @click="toggleModal('fabled')">
             Add Fabled
-            <em><font-awesome-icon icon="dragon"/></em>
+            <em>[F]</em>
           </li>
           <li @click="clearRoles" v-if="players.length">
             Remove all
@@ -252,16 +252,22 @@ export default {
     },
     hostSession() {
       if (this.session.sessionId) return;
-      const sessionId = prompt(
-        "Enter a channel number / name for your session",
-        Math.round(Math.random() * 10000)
+      const sessionId = Math.round(Math.random() * 10000).toString();
+      var numPlayers = prompt(
+        ("Hosting session " + sessionId + ", please enter number of players"), 12
       );
       if (sessionId) {
         this.$store.commit("session/clearVoteHistory");
         this.$store.commit("session/setSpectator", false);
         this.$store.commit("session/setSessionId", sessionId);
         this.copySessionUrl();
-      }
+      };
+      if (numPlayers > 0){
+        this.$store.commit("players/clear");
+        for(let i=0; i < numPlayers; i++){
+          this.addPlayer();
+        }
+      };
     },
     copySessionUrl() {
       const url = window.location.href.split("#")[0];
@@ -294,6 +300,14 @@ export default {
       let sessionId = prompt(
         "Enter the channel number / name of the session you want to join"
       );
+      if (!sessionId) return;
+      var name = prompt("Enter player name");
+      const nameLength = name.split(". ").length;
+      if (nameLength > 1){
+        alert("Player name cannot contain special character \".\"");
+        return;
+      }
+      this.$store.commit("session/setPlayerName", name);
       if (sessionId.match(/^https?:\/\//i)) {
         sessionId = sessionId.split("#").pop();
       }
@@ -306,17 +320,29 @@ export default {
     },
     leaveSession() {
       if (confirm("Are you sure you want to leave the active live game?")) {
+        // vacate seat upon leaving the room
+        if (!this.session.isSpectator) return;
+        const playerIndex = this.session.claimedSeat;
+        if (this.session.playerId === this.players[playerIndex].id) {
+          this.$store.commit("session/claimSeat", -1);
+        } else {
+          this.$store.commit("session/claimSeat", playerIndex);
+        }
+
         this.$store.commit("session/setSpectator", false);
         this.$store.commit("session/setSessionId", "");
+        this.$store.commit("session/setPlayerName", "Empty Seat");
       }
     },
     addPlayer() {
       if (this.session.isSpectator) return;
       if (this.players.length >= 20) return;
-      const name = prompt("Player name");
-      if (name) {
-        this.$store.commit("players/add", name);
-      }
+      
+      // setting name to a default value, combining with the seat number
+      const splitSign = ". ";
+      const namePlaceholder = "Empty Seat";
+      this.$store.commit("players/add", ((this.players.length + 1).toString() + splitSign + namePlaceholder));
+
     },
     randomizeSeatings() {
       if (this.session.isSpectator) return;

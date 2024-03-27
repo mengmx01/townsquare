@@ -68,6 +68,15 @@
         <font-awesome-icon :icon="['fas', 'cloud-moon']" />
       </span>
     </li>
+    <li>
+      <span>
+        Room：
+      </span>
+      <span>
+        {{ this.$store.state.session.sessionId }}
+      </span>
+    </li>
+    <li ref="username"></li>
   </ul>
 </template>
 

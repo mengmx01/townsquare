@@ -615,7 +615,7 @@ class LiveSession {
     if (!this._isSpectator) return;
     const players = this._store.state.players.players;
     if (players.length > seat && (seat < 0 || !players[seat].id)) {
-      this._send("claim", [seat, this._store.state.session.playerId]);
+      this._send("claim", [seat, this._store.state.session.playerId, this._store.state.session.playerName]);
     }
   }
 
@@ -625,16 +625,22 @@ class LiveSession {
    * @param value playerId to add / remove
    * @private
    */
-  _updateSeat([index, value]) {
+  _updateSeat([index, value, name]) {
+    // index is the seat number, value is the playerId, name is the playerName
     if (this._isSpectator) return;
-    const property = "id";
+    // const property = "id";
     const players = this._store.state.players.players;
     // remove previous seat
     const oldIndex = players.findIndex(({ id }) => id === value);
     if (oldIndex >= 0 && oldIndex !== index) {
       this._store.commit("players/update", {
         player: players[oldIndex],
-        property,
+        property: "name",
+        value: ((oldIndex+1).toString().concat(". ", "Empty Seat"))
+      });
+      this._store.commit("players/update", {
+        player: players[oldIndex],
+        property: "id",
         value: ""
       });
     }
@@ -642,7 +648,8 @@ class LiveSession {
     if (index >= 0) {
       const player = players[index];
       if (!player) return;
-      this._store.commit("players/update", { player, property, value });
+      this._store.commit("players/update", { player, property:"name", value: ((index+1).toString().concat(". ", name))});
+      this._store.commit("players/update", { player, property: "id", value });
     }
     // update player session list as if this was a ping
     this._handlePing([true, value, 0]);

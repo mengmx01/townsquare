@@ -67,6 +67,10 @@ const actions = {
       .map(a => [Math.random(), a])
       .sort((a, b) => a[0] - b[0])
       .map(a => a[1]);
+    players.forEach(player => {
+      player["id"] = (players.indexOf(player) + 1).toString();
+      player["name"] = player["id"].concat(". ", player["name"].split(". ")[1]);
+    })
     commit("set", players);
   },
   clearRoles({ state, commit, rootState }) {
@@ -124,6 +128,10 @@ const mutations = {
   },
   remove(state, index) {
     state.players.splice(index, 1);
+    state.players.forEach(player => {
+      player["id"] = (state.players.indexOf(player) + 1).toString();
+      player["name"] = player["id"].concat(". ", player["name"].split(". ")[1]);
+    })
   },
   swap(state, [from, to]) {
     [state.players[from], state.players[to]] = [
@@ -132,9 +140,17 @@ const mutations = {
     ];
     // hack: "modify" the array so that Vue notices something changed
     state.players.splice(0, 0);
+    state.players.forEach(player => {
+      player["id"] = (state.players.indexOf(player) + 1).toString();
+      player["name"] = player["id"].concat(". ", player["name"].split(". ")[1]);
+    })
   },
   move(state, [from, to]) {
     state.players.splice(to, 0, state.players.splice(from, 1)[0]);
+    state.players.forEach(player => {
+      player["id"] = (state.players.indexOf(player) + 1).toString();
+      player["name"] = player["id"].concat(". ", player["name"].split(". ")[1]);
+    })
   },
   setBluff(state, { index, role } = {}) {
     if (index !== undefined) {

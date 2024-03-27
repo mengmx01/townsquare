@@ -287,7 +287,22 @@ export default {
     },
     changeName() {
       if (this.session.isSpectator) return;
-      const name = prompt("Player name", this.player.name) || this.player.name;
+      const seatNum = this.player.name.split(". ")[0];
+      var name = prompt("Player name", this.player.name) || this.player.name;
+      const nameLength = name.split(". ").length;
+      if (nameLength > 2){
+        alert("Player name cannot contain special character \".\"");
+        return;
+      }
+      if (nameLength == 2){
+        const nameFirst = name.split(". ")[0];
+        if (isNaN((Number(nameFirst)))){
+          alert("Player name cannot contain special character \".\"");
+          return;
+        }
+        name = name.split(". ")[1];
+      }
+      name = seatNum.concat(". ", name);
       this.updatePlayer("name", name, true);
     },
     removeReminder(reminder) {

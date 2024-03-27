@@ -86,6 +86,9 @@ export default {
     keyup({ key, ctrlKey, metaKey }) {
       if (ctrlKey || metaKey) return;
       switch (key.toLocaleLowerCase()) {
+        case "m":
+          this.$store.commit("toggleMenu");
+          break;
         case "g":
           this.$store.commit("toggleGrimoire");
           break;
@@ -111,6 +114,10 @@ export default {
         case "c":
           if (this.session.isSpectator) return;
           this.$store.commit("toggleModal", "roles");
+          break;
+        case "f":
+          if (this.session.isSpectator) return;
+          this.$store.commit("toggleModal", "fabled");
           break;
         case "v":
           if (this.session.voteHistory.length || !this.session.isSpectator) {
